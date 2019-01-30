@@ -10,6 +10,7 @@ import org.commonmark.renderer.html.AttributeProvider;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import springboot.constant.WebConst;
 import springboot.exception.TipException;
@@ -26,6 +27,7 @@ import java.io.*;
 import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -179,17 +181,28 @@ public class MyUtils {
         lock.lock();
         try {
             if (dataSource == null) {
-                Properties properties = MyUtils.getPropFromFile("classpath:application-jdbc.properties");
-                if (properties.size() == 0) {
-                    return dataSource;
+//                Properties properties = MyUtils.getPropFromFile("classpath:application-jdbc.properties");
+                Properties properties = null;
+                try {
+                    properties = PropertiesLoaderUtils.loadAllProperties("application-jdbc.properties");
+                    System.out.println("数据配置:"+properties);
+                    if (properties.size() == 0) {
+                        return dataSource;
+                    }
+                    DriverManagerDataSource managerDataSource = new DriverManagerDataSource();
+                    managerDataSource.setDriverClassName(properties.getProperty("spring.datasource.driverClassName"));
+                    managerDataSource.setPassword(properties.getProperty("spring.datasource.password"));
+//                    String str = properties.getProperty("spring.datasource.url") + "/" + properties.getProperty("spring.datasource.dbname") + "?useUnicode=true&characterEncoding=utf-8&useSSL=false";
+                    String str = properties.getProperty("spring.datasource.url");
+                    managerDataSource.setUrl(str);
+                    managerDataSource.setUsername(properties.getProperty("spring.datasource.username"));
+                    dataSource = managerDataSource;
+                    System.out.println(dataSource.getConnection());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-                DriverManagerDataSource managerDataSource = new DriverManagerDataSource();
-                managerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-                managerDataSource.setPassword(properties.getProperty("spring.datasource.password"));
-                String str = "jdbc:mysql://" + properties.getProperty("spring.datasource.url") + "/" + properties.getProperty("spring.datasource.dbname") + "?useUnicode=true&characterEncoding=utf-8&useSSL=false";
-                managerDataSource.setUrl(str);
-                managerDataSource.setUsername(properties.getProperty("spring.datasource.username"));
-                dataSource = managerDataSource;
             }
 
         } finally {
@@ -345,5 +358,13 @@ public class MyUtils {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    public static void main(String[] args) {
+        String name="admin";
+        String pass = "admin";
+
+        System.out.println(MD5encode(name+pass));
+
     }
 }

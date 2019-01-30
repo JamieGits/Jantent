@@ -37,5 +37,7 @@ public final class AdminCommons {
         int r = Tools.rand(0, COLORS.length - 1);
         return COLORS[r];
     }
-
+    public static void main(String[] args) {
+		System.out.println(System.currentTimeMillis());
+	}
 }

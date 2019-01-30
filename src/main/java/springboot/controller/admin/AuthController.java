@@ -59,7 +59,7 @@ public class AuthController extends AbstractController {
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, userVo);
             // 设置12小时的cookie
             MyUtils.setCookie(response, userVo.getUid());
-            logService.insertLog(LogActions.LOGIN.getAction(), null, request.getRemoteAddr(), userVo.getUid());
+            logService.insertLog(LogActions.LOGIN.getAction(), userVo.toString(), request.getRemoteAddr(), userVo.getUid());
         } catch (Exception e) {
             error_count = null == error_count ? 1 : error_count + 1;
             if (error_count > 3) {

@@ -122,7 +122,7 @@ public class SiteServiceImpl implements ISiteService {
             String zip = bkAttachDir + zipFile;
             ZipUtils.zipFile(sqlFile.getPath(), zip);
 
-            Thread.sleep(500);
+//            Thread.sleep(500);
 
             if (!sqlFile.exists()) {
                 throw new TipException("数据库备份失败");

@@ -10,8 +10,8 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <thymeleaf.version>3.0.0.RELEASE</thymeleaf.version>
-        <thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
+        <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
+        <thymeleaf-layout-dialect.version>2.1.0</thymeleaf-layout-dialect.version>
     </properties>
     <packaging>jar</packaging>
 
@@ -20,6 +20,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork><!-- fork:如果没有该配置，这个devtools不会起作用，即应用不会restart -->
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -71,6 +74,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.22</version>
         </dependency>
 
         <dependency>
@@ -150,7 +158,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
 </project>

@@ -8,7 +8,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 import springboot.service.IMailService;
 
 import javax.annotation.Resource;
